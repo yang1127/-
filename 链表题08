@@ -1,0 +1,63 @@
+# Data-Structure
+
+//链表的回文结构
+
+class PalindromeList {
+public:
+struct ListNode* reverseList(struct ListNode* head)
+{
+    //思路：输出为 NULL<-1<-2<-3<-4<-5 将头指向的next置为NULL，将1-5链接输出,取三个指针
+    if(head == NULL || head->next == NULL)
+    {
+        return head;    
+    }
+    struct ListNode* p1 = head;
+    struct ListNode* p2 = p1->next;
+    struct ListNode* p3 = p2->next;
+    head->next = NULL;
+    while(p2 != NULL)
+    {
+        p2->next = p1;
+        p1 = p2;
+        p2 = p3;
+       if(p3 != NULL)
+       {
+           p3 = p3->next;
+       }
+    }
+    head = p1;
+    return head;
+}
+    
+bool chkPalindrome(ListNode* A)
+{
+    //思路：将链表均分为左右两部分，需要找到中间结点，使用快慢指针；右半部分逆转后，再判断这两部分是否相等
+    
+    struct ListNode* slow = A;
+    struct ListNode* fast = A;
+    
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast ->next->next;
+    }
+    
+    struct ListNode* leftlist = A;
+    struct ListNode* rightlist = slow->next;
+    slow->next = NULL;  //把左右分开
+    
+     rightlist = reverseList(rightlist);
+    
+    while (rightlist != NULL)  //遍历
+    {
+        if (leftlist->val != rightlist->val)
+            return false;
+        else
+        {
+            leftlist = leftlist->next;
+            rightlist = rightlist->next;
+        }
+    }
+    return true;
+    }
+};
