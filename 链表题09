@@ -1,0 +1,47 @@
+# Data-Structure
+//输入两个链表，找出它们的第一个公共结点
+
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+    //要求：如果两个链表没有交点，返回 null；在返回结果后，两个链表仍须保持原有的结构；可假定整个链表结构中没有循环；程序尽量满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+    //思路：(1)先遍历A、B，找到尾，看相不相交，同时计算除A、B的长度；(2)|A-B|的差值，长的先走|A-B|，A、B再同时遍历，第一个相等的即为第一个结点
+   
+    if(headA == NULL || headB == NULL) //若两个链表其中一个为空，则不会相交
+        return NULL;
+    
+    struct ListNode* curA = headA;
+    struct ListNode* curB = headB;
+    int lengthA = 0, lengthB = 0;
+    while(curA->next != NULL)  //尾不为空
+    {
+        curA = curA->next;
+        ++lengthA;
+    }
+    while(curB->next != NULL)  //尾不为空
+    {
+        curB = curB->next;
+        ++lengthB;
+    }
+    if(curA != curB)  //判断尾是否相等
+    {
+        return NULL;
+    }
+    //两个链表长度
+    struct ListNode* longL = headA;
+    struct ListNode* shortL = headB;
+    if(lengthB > lengthA)
+    {
+        longL = headB;
+        shortL = headA;
+    }
+    int gap = abs(lengthA - lengthB); //两链表相差值
+    while(gap--)
+    {
+        longL = longL->next;
+    }
+    while(longL != shortL)
+    {
+        longL = longL->next;
+        shortL = shortL->next;
+    }
+    return longL;
+}
