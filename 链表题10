@@ -1,0 +1,27 @@
+# Data-Structure
+
+//给定一个链表，判断链表中是否有环
+
+typedef struct ListNode ListNode;
+
+bool hasCycle(struct ListNode *head) {
+
+    //思路：使用快慢指针，慢走一步、快走两步、若快追上慢，则有环
+
+    ListNode* slow = head;
+
+    ListNode* fast = head;
+
+    while (fast != NULL && fast->next != NULL)
+
+    {
+        slow = slow->next;
+
+        fast = fast->next->next;
+
+        if (fast == slow)
+
+            return true;
+    }
+    return false;
+}
