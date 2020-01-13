@@ -1,0 +1,58 @@
+# Data-Structure
+//给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 NULL,返回meet值
+
+typedef struct ListNode ListNode;
+
+ListNode* hasCycle(struct ListNode *head) {
+
+
+    //思路：使用快慢指针，慢走一步、快走两步、若快追上慢，则有环
+
+    ListNode* slow = head;
+
+    ListNode* fast = head;
+
+    while (fast != NULL && fast->next != NULL)
+
+    {
+
+        slow = slow->next;
+
+        fast = fast->next->next;
+
+
+        if (fast == slow)
+
+            return slow;
+
+    }
+
+    return NULL;
+}
+
+struct ListNode *detectCycle(struct ListNode *head) {
+
+    //思路：先判断是否有环，再求meet
+
+    
+
+    ListNode* meet = hasCycle(head);
+
+    if (meet == NULL)
+
+        return NULL;
+
+    
+
+    while (meet != head)  //不相等的话，继续走
+
+    {
+
+        meet = meet->next;
+
+        head = head->next;
+
+    }
+
+    return meet;  //相等则返回meet
+}
