@@ -1,0 +1,139 @@
+# Data-Structure
+
+//给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。要求返回这个链表的深度拷贝
+
+class Node {
+
+public:
+
+    int val;
+
+    Node* next;
+
+    Node* random;
+
+    Node() {}
+
+    Node(int _val, Node* _next, Node* _random) {
+
+        val = _val;
+
+        next = _next;
+
+        random = _random;
+
+    }
+
+};
+
+*/
+
+Node* BuyNode(int val)
+
+{
+
+    Node* node = (Node*)malloc(sizeof(Node));
+
+    node->val = val;
+
+    node->next = NULL;
+
+    node->random = NULL;
+
+    
+
+    return node;
+
+}
+
+class Solution {
+
+public:
+
+    Node* copyRandomList(Node* head) {
+
+
+       //思路：拷贝插入、置random、拆解——链接
+       //拷贝插入结点
+
+       Node* cur = head;
+
+       while(cur != NULL)  //遍历原链表
+
+       {
+
+           Node* next = cur->next;  //原结点<->指向新结点<->下一个原结点  先把原结点的下一个结点保存
+
+           Node* copynode = BuyNode(cur->val); //新结点
+
+           cur->next = copynode; //原结点<->指向新结点
+
+           copynode->next = next; //新结点<->下一个原结点
+
+        
+
+           cur = next; //迭代
+
+       }
+
+
+        // 置random
+
+        cur = head;
+
+        while(cur)
+
+        {
+
+            Node* cpnode = cur->next;
+      
+
+            if(cur->random) //置random
+
+                cpnode->random = cur->random->next;
+
+            cur = cur->next->next; //迭代
+
+        }  
+        
+
+        // 拆解-链接
+
+        Node* cphead = BuyNode(0);
+
+        Node* cptail = cphead;
+
+        
+        cur = head;
+
+        while(cur)
+
+        {
+
+            Node* cpnode = cur->next;
+
+            Node* next = cur->next->next;
+
+
+            cur->next = next; //拆解
+            
+
+            cptail->next = cpnode; //链接
+
+            cptail = cpnode;
+
+            
+            cur = next; //迭代
+
+        }
+        
+
+        Node* cplist =  cphead->next;
+
+        free(cphead);
+        
+
+        return cplist;
+
+    }
+};
