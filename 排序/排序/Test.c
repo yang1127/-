@@ -2,7 +2,7 @@
 
 void TestSort()
 {
-	int a[] = {9, 7, 1, 5, 4, 3, 6, 8, 0, 2};
+	int a[] = {1, 5, 3, 8, 7, 6};
 	printf("÷±Ω”≤Â»Î≈≈–Ú£∫");
 	InsertSort(a, sizeof(a) / sizeof(int));
 	PrintArry(a, sizeof(a) / sizeof(int));

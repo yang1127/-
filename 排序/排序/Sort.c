@@ -24,7 +24,7 @@ void InsertSort(int* a, int n) //直接插入排序
 				break;
 			}
 		}
-		a[end + 1] = tmp;  //前面已排好序，之直接插入最后一个w位置
+		a[end + 1] = tmp;  //前面已排好序，直接插入最后一个位置
 	}
 }
 
@@ -67,7 +67,7 @@ void Swap(int* p1, int* p2)
 }
 
 //选择排序
-void SelectSort(int* a, int n) //快速排序
+void SelectSort(int* a, int n) //选择排序
 {
 	//思路：每一次从待排序的数据元素中选出最小元素放到起始位置，选取最大元素放大序列最后，直到全部待排序的数据元素排完。
     //若选取的元素不是这组元素中的第一个和最后一个元素，则将它们与这组元素中的第一个和最后一个元素交换
@@ -83,7 +83,7 @@ void SelectSort(int* a, int n) //快速排序
 			if (a[i] > a[max_index])
 				max_index = i; //将大的元素地址给与max，方可经行下一轮比较
 			if (a[i] < a[min_index])
-				max_index = i;
+				min_index = i;
 
 			Swap(&a[i], &a[max_index]); //&
 			Swap(&a[i], &a[min_index]); //&
