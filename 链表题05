@@ -1,0 +1,53 @@
+# Data-Structure
+//将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的
+
+typedef struct ListNode Node;
+struct ListNode* mergeTwoLists(struct ListNode* l1, struct ListNode* l2)
+{
+    
+    //思路：若l1(l2)链表为空，则新链表为l2(l1);若两链表均不为空，则l1的第一个结点与l2的第一个结点比较
+    //谁小放到新链表中，相等的话依次放入，再l2的第一个与l1第二个的比较依次下去
+    //哪个链表先完、把另一个链表剩余值链接到新的链表中
+    
+    if (l1 == NULL)
+        return l2;
+    if (l2 == NULL)
+        return l1;
+    
+    Node* head = NULL;
+    Node* tail = NULL;
+    if (l1->val < l2->val)
+    {
+        head = l1;
+        l1 = l1->next;
+    }
+    else
+    {
+        head = l2;
+        l2 = l2->next;
+    }
+    
+    tail = head;
+    while (l1 != NULL && l2 != NULL)
+    {
+        if (l1->val < l2->val)
+        {
+            tail->next = l1;
+            l1 = l1->next;
+        }
+        else
+        {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
+    }
+    
+    if(l1 != NULL)
+        tail->next = l1;
+    
+    if(l2 != NULL)
+        tail->next = l2;
+    
+    return head;
+}

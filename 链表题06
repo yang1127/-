@@ -1,0 +1,44 @@
+# Data-Structure
+//以给定值x为基准将链表分割成两部分，所有小于x的结点排在大于或等于x的结点之前
+
+class Partition {
+public:
+    ListNode* partition(ListNode* pHead, int x) {
+        // write code here
+        if(pHead == NULL)
+        {
+            return NULL;
+        }
+        //建立两个链表，一个小的，一个较大的，并建立两个头结点且为空
+        struct ListNode* lessHead, *lessTail;
+        struct ListNode* greaterHead, *greaterTail;
+        //开辟空间
+        lessHead = lessTail = (struct ListNode*)malloc(sizeof(struct ListNode));
+        greaterHead = greaterTail = (struct ListNode*)malloc(sizeof(struct ListNode));
+        struct ListNode* cur = pHead;
+        while(cur  != NULL)
+        {
+            if(cur->val < x)
+            {
+                lessTail->next = cur;
+                lessTail = cur;
+                cur = cur->next;
+            }
+            else
+            {
+                greaterTail->next = cur;
+                greaterTail = cur;
+                cur = cur->next;
+            }
+        }
+        
+        lessTail->next = greaterHead->next; //两链表进行链接
+        greaterTail->next = NULL;
+        
+        pHead = lessHead->next;
+        free(lessHead); //释放掉两链表的头，空结点
+        free(greaterHead);
+        
+        return pHead;
+    }
+};
