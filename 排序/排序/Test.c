@@ -58,5 +58,6 @@ int main()
 {
 	TestSort();
 	system("pause");
+	
 	return 0;
 }
