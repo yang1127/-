@@ -57,6 +57,9 @@ void TestSort()
 int main()
 {
 	TestSort();
+
+	//TestOP();
+
 	system("pause");
 	
 	return 0;

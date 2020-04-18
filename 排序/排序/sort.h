@@ -40,3 +40,5 @@ void CountSort(int* a, int n);
 
 void PrintArry(int* a, int n); //´òÓ¡
 void TestSort();
+
+void TestOP();//²âĞÔÄÜ

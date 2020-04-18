@@ -1,5 +1,7 @@
 #include "sort.h"
 #include "Stack.h"
+#include <time.h>
+
 
 //插入排序
 void InsertSort(int* a, int n) //直接插入排序
@@ -69,15 +71,14 @@ void Swap(int* p1, int* p2)
 //选择排序
 void SelectSort(int* a, int n) //选择排序
 {
-	//思路：每一次从待排序的数据元素中选出最小元素放到起始位置，选取最大元素放大序列最后，直到全部待排序的数据元素排完。
-    //若选取的元素不是这组元素中的第一个和最后一个元素，则将它们与这组元素中的第一个和最后一个元素交换
+	//思路：每一次从待排序的数据元素中选出最小元素放到起始位置，选取最大元素放到序列最后，直到全部待排序的数据元素排完。
 
 	int begin = 0;
 	int end = n - 1;
 	int max_index, min_index; //index->指针
-	max_index = min_index = 0;
 	while (begin <= end)
 	{
+		min_index = max_index = begin;
 		for (int i = begin + 1; i < end; ++i)
 		{
 			if (a[i] > a[max_index])
@@ -86,6 +87,11 @@ void SelectSort(int* a, int n) //选择排序
 				min_index = i;
 
 			Swap(&a[i], &a[max_index]); //&
+			if (max_index == begin)  //当最大值在开始时，需要将最小地址交换给最大地址，否则最大值的位置会有冲突
+			{
+				max_index = min_index;
+			}
+
 			Swap(&a[i], &a[min_index]); //&
 		}
 		--end;
@@ -93,7 +99,7 @@ void SelectSort(int* a, int n) //选择排序
 	}
 }
 
-void AdujustDown(int* a, int n, int parent)
+void AdujustDown(int* a, int n, int parent) //向下调整
 {
 	int child = parent * 2 + 1;
 	while (child < n)
@@ -163,10 +169,12 @@ int OneSort1(int* a, int left, int right)
 
 	    Swap(&a[left], &a[right]);
 
-	    while (left > right) //防止溢出
-		    ++left;
-	    while (left < right)
-		    --right;
+		if (left < right)
+		{
+			Swap(&a[left], &a[right]);
+			++left;
+			--right;
+		}
 	}
 
 	Swap(&a[left], &a[key_index]); //left = right时，选取右key，则a[left] 与 key所指的数值交换
@@ -180,7 +188,7 @@ void QuickSort1(int* a, int left, int right) //快速排序
 	//左指针向左找大于key所对应的数，右指针找小于key所对应的数值，找到左右指针对应的数值交换
 	//右边作key，先走左，后走右；左边为key，先走右，后走左；指针相遇时，left与右key交换、right与左key交换
 
-	if (left > right)  //没有导致溢出
+	if (left >= right)  //判断左右区间大小
 		return;
 
 	int key_index = OneSort1(a, left, right); //区间分为三部分：[left, key_index-1] key [key_index + 1, right]
@@ -356,6 +364,7 @@ void _MergeSort(int* a, int left, int right, int* tmp)
 		tmp[i++] = a[begin2++];
 	}
 
+	//拷回原数组中，开始将数据均放于临时数组中
 	memcpy(a + left, tmp + left, sizeof(int)*(i - left)); //原、目标、大小（right-left+1）但针对每个小区间
 
 }
@@ -424,6 +433,8 @@ void MergeSortNonR(int* a, int n) //非递归 归并排序 时间复杂度： O（nlogn）
 	free(tmp);
 }
 
+//非比较排序
+//计数排序
 void CountSort(int* a, int n)
 {
 	//思路：统计相同元素出现次数，根据统计的结果将序列回收到原来的序列中
@@ -468,4 +479,67 @@ void PrintArry(int* a, int n)
 		printf("%d ", a[i]);
 	}
 	printf("\n");
+}
+
+void TestOP()
+{
+	srand(time(0));
+	const int N = 100000;
+	int* a1 = (int*)malloc(sizeof(int)*N);
+	int* a2 = (int*)malloc(sizeof(int)*N);
+	int* a3 = (int*)malloc(sizeof(int)*N);
+	int* a4 = (int*)malloc(sizeof(int)*N);
+	int* a5 = (int*)malloc(sizeof(int)*N);
+	int* a6 = (int*)malloc(sizeof(int)*N);
+
+
+
+	for (int i = 0; i < N; ++i)
+	{
+		a1[i] = rand();
+		a2[i] = a1[i];
+		a3[i] = a1[i];
+		a4[i] = a1[i];
+		a5[i] = a1[i];
+		a6[i] = a1[i];
+
+	}
+
+	int begin1 = clock();
+	InsertSort(a1, N);
+	int end1 = clock();
+
+	int begin2 = clock();
+	ShellSort(a2, N);
+	int end2 = clock();
+
+	int begin3 = clock();
+	SelectSort(a3, N);
+	int end3 = clock();
+
+	int begin4 = clock();
+	HeapSort(a4, N);
+	int end4 = clock();
+
+	int begin5 = clock();
+	QuickSort1(a5, 0, N - 1);
+	int end5 = clock();
+
+	int begin6 = clock();
+	MergeSort(a6, N);
+	int end6 = clock();
+
+	printf("InsertSort:%d\n", end1 - begin1);
+	printf("ShellSort:%d\n", end2 - begin2);
+	printf("SelectSort:%d\n", end3 - begin3);
+	printf("HeapSort:%d\n", end4 - begin4);
+	printf("QuickSort1:%d\n", end5 - begin5);
+	printf("MergeSort:%d\n", end6 - begin6);
+
+	free(a1);
+	free(a2);
+	free(a3);
+	free(a4);
+	free(a5);
+	free(a6);
 }
